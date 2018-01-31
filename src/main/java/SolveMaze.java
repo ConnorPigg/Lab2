@@ -26,14 +26,30 @@ public class SolveMaze {
          * Pick (0, 0), the bottom left corner, as the starting point.
          * Put the end in the top right corner.
          */
-        maze.startAtZero();
-        maze.endAtTopRight();
-
+        //maze.startAtZero();
+        //maze.endAtTopRight();
+        maze.endAtRandomLocation();
+        maze.startAtRandomLocation();
         /*
          * You should be able to solve a 10 x 10 maze in (far fewer than) 1000 steps.
          * Feel free to adjust this number if you experiment with other mazes.
          */
-        for (int step = 0; step < 1000; step++) {
+        System.out.println(solveRand(maze));
+
+        if (maze.isFinished()) {
+            System.out.println("You solved the maze!");
+        } else {
+            System.out.println("Try again!");
+        }
+    }
+    /**
+     * This is a function to solve the maze that should use Left wall following.
+     *
+     * @param maze pass in the maze object to be solved
+     */
+    private static int solveMaze(Maze maze){
+        int step = 0;
+        while (!maze.isFinished()) {
             // Implement your maze solving algorithm here
             maze.turnLeft();
             if (maze.canMove()) {
@@ -49,15 +65,33 @@ public class SolveMaze {
                     }
                 }
             }
-            if (maze.isFinished()){
-                break;
+            step++;
+        }
+        return step;
+    }
+    /**
+     * A function that solves the maze with random walk.
+     *
+     * @param maze th maze to solve.
+     */
+    private static int solveRand(Maze maze){
+        int step = 0;
+        while (!maze.isFinished()) {
+            if (maze.canMove()) {
+                maze.move();
+            } else {
+                int rand = (int) (Math.random() * 2); //either 0 or 1
+                if (rand == 0) {
+                    maze.turnRight();
+                } else {
+                    maze.turnLeft();
+                }
+            }
+            step++;
+            if(step % 10000000 == 0) {
+                System.out.println(step);
             }
         }
-
-        if (maze.isFinished()) {
-            System.out.println("You solved the maze!");
-        } else {
-            System.out.println("Try again!");
-        }
+        return step;
     }
 }
